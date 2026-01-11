@@ -10,6 +10,7 @@ require("dotenv").config();
 const StoreOwnerRoutes = require("./routes/StoreOwnerRoutes");
 const StoreRoutes = require("./routes/StoreRoutes");
 const UserRoutes = require("./routes/UserRoutes");
+const CommentRoutes = require("./routes/CommentRoutes");
 
 app.use(cors());
 app.use(express.json());
@@ -28,6 +29,7 @@ mongoose
 app.use("/store-owner", StoreOwnerRoutes);
 app.use("/store", StoreRoutes);
 app.use("/user", UserRoutes);
+app.use("/comment", CommentRoutes);
 
 app.get("/", (req, res) => {
   res.send("App is working");

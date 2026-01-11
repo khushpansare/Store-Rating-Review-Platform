@@ -1,48 +1,33 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
 const router = express.Router();
 
 // CUSTOM COMPONENT
-const StoreSchema = require("../models/StoreSchema");
+const CommentSchema = require("../models/CommentSchema");
 
 router.get("/", async (req, res) => {
-  const all_stores = await StoreSchema.find().populate("created_by");
+  const all_stores = await CommentSchema.find();
 
   res.send({
     products: all_stores,
   });
+  res.send("Comment");
 });
 
 router.post("/add", async (req, res) => {
   try {
-    const {
-      store_name,
-      store_address,
-      store_landmark,
-      store_state,
-      store_pincode,
-      store_city,
-      store_country,
-    } = req.body;
+    const { comment, rating, store_id } = req.body;
 
     const decoded_token = jwt.decode(req.cookies.token);
 
-    const store = await StoreSchema.create({
-      store_name,
-      store_address,
-      store_landmark,
-      store_state,
-      store_pincode,
-      store_city,
-      store_country,
-      created_by: decoded_token.id,
+    const store = await CommentSchema.create({
+      comment,
+      rating,
+      store_id,
+      comment_by: decoded_token.id,
     });
 
-    const all_stores = await StoreSchema.find().populate({
-      path: "created_by",
-      strictPopulate: false,
-    });
+    const all_stores = await CommentSchema.find();
     res.send({
       message: "Your Store added succesfully.",
       products: all_stores,
@@ -57,11 +42,11 @@ router.patch("/update/:id", async (req, res) => {
     const storeId = req.params.id;
     const updateData = req.body;
 
-    const updatedStore = await StoreSchema.findByIdAndUpdate(storeId, {
+    const updatedStore = await CommentSchema.findByIdAndUpdate(storeId, {
       $set: updateData,
     });
 
-    const all_stores = await StoreSchema.find().populate("created_by");
+    const all_stores = await CommentSchema.find();
     res.send({
       message: "Your Store updated succesfully.",
       products: all_stores,
@@ -75,9 +60,9 @@ router.delete("/delete/:id", async (req, res) => {
   try {
     const storeId = req.params.id;
 
-    const deletedStore = await StoreSchema.findByIdAndDelete(storeId);
+    const deletedStore = await CommentSchema.findByIdAndDelete(storeId);
 
-    const all_stores = await StoreSchema.find().populate("created_by");
+    const all_stores = await CommentSchema.find();
     res.send({
       message: "Your Store deleted succesfully.",
       products: all_stores,

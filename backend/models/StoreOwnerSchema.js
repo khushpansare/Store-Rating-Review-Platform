@@ -9,3 +9,11 @@ const StoreOwnerSchema = mongoose.Schema({
 });
 
 module.exports = mongoose.model("StoreOwnerSchema", StoreOwnerSchema);
+
+// "store_name": "dummy store",
+// "store_address": "sainath nagar",
+// "store_landmark": "near balaji icecream",
+// "store_state": "Maharashtra",
+// "store_pincode": 425200,
+// "store_city": "Pune",
+// "store_country": "India"
