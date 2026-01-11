@@ -1,0 +1,77 @@
+@use "variables" as *;
+
+.auth-container {
+  width: 90vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin: 35px 0 15px;
+  padding: 25px;
+  background-color: $color-light-grey;
+  border-radius: 5px;
+
+  .img {
+    text-align: center;
+    h3 {
+      margin: 15px 0;
+      max-width: 400px;
+      overflow-wrap: break-word;
+      word-wrap: break-word; /* legacy support */
+    }
+    img {
+      width: 300px;
+    }
+  }
+
+  .form-content {
+    background-color: $color-white;
+    padding: 25px 15px;
+    border-radius: 5px;
+
+    .error-box {
+      color: $red;
+      margin-bottom: 15px;
+    }
+
+    button {
+      float: right;
+      margin-top: 25px;
+    }
+  }
+}
+
+@media (max-width: $laptop) {
+  .auth-container {
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    margin: 35px 0 15px;
+    padding: 0;
+
+    .img {
+      text-align: center;
+
+      h3 {
+        margin: 15px 0;
+        max-width: fit-content;
+        overflow-wrap: break-word;
+        word-wrap: break-word; /* legacy support */
+      }
+      img {
+        width: 300px;
+        display: none;
+      }
+    }
+
+    .form-content {
+      .input {
+        width: 100%;
+      }
+
+      button {
+        float: right;
+        margin-top: 25px;
+      }
+    }
+  }
+}

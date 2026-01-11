@@ -1,0 +1,80 @@
+@use "variables" as *;
+
+header {
+  background-color: $color-dark-grey;
+  color: $color-white;
+
+  nav {
+    padding: 5px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h2 {
+      color: $color-white;
+    }
+
+    .middle-list {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      li {
+        margin: 0 10px;
+      }
+    }
+
+    ul li a {
+      position: relative;
+      text-decoration: none;
+      color: $color-white;
+      font-weight: 500;
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        bottom: -4px;
+        width: 0;
+        height: 2px;
+        background-color: $color-white;
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+      }
+
+      &:hover::after {
+        width: 100%;
+      }
+    }
+    i {
+      color: $color-white;
+      transition: 0.4s all;
+
+      &:hover {
+        color: $color-dark-grey;
+        background: $color-white;
+        transition: 0.4s all;
+      }
+    }
+
+    .ham-burger-menu {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: $tablet) {
+  header {
+    nav {
+      padding: 5px 10px;
+
+      .middle-list {
+        display: none;
+      }
+
+      .ham-burger-menu {
+        display: block;
+      }
+    }
+  }
+}

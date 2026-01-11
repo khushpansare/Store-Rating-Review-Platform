@@ -1,0 +1,138 @@
+@use "variables" as *;
+
+.admin-dashboard {
+  // height: 100vh;
+  background: $color-light-grey;
+  display: flex;
+
+  .admin-side-nav {
+    // height: 100vh;
+    width: 300px;
+    border-top: 1px solid #fff;
+    background: $color-dark-grey;
+
+    ul {
+      margin: 50px 25px 0;
+
+      li {
+        position: relative;
+        text-decoration: none;
+        color: $color-white;
+        font-weight: 500;
+
+        &::after {
+          content: "";
+          position: absolute;
+          left: 50%;
+          bottom: -4px;
+          width: 0;
+          height: 2px;
+          background-color: $color-white;
+          transition: all 0.3s ease;
+          transform: translateX(-50%);
+        }
+
+        &:hover::after {
+          width: 100%;
+        }
+        a,
+        i {
+          color: $color-white;
+          font-size: 15px;
+        }
+      }
+
+      .active {
+        color: $red;
+      }
+    }
+  }
+
+  // Product page Table design
+  .table-wrapper {
+    width: 100%; /* table takes 100% of wrapper */
+    max-height: 100vh;
+    overflow-x: auto;
+    overflow-y: auto;
+    //   -webkit-overflow-scrolling: touch;
+
+    .header {
+      a {
+        border: 2px solid $color-dark-grey;
+        &:hover {
+          color: $color-white;
+
+          i {
+            color: $color-white;
+          }
+        }
+      }
+    }
+  }
+
+  table {
+    width: 100%;
+    margin: 15px;
+    border-collapse: separate; /* MUST */
+    border-spacing: 0 12px;
+    background: transparent;
+    overflow: hidden;
+
+    th {
+      padding: 15px;
+      text-align: center;
+    }
+
+    td {
+      padding: 5px 15px;
+      text-align: center;
+      // max-width: 100px;
+      white-space: normal;
+      word-wrap: break-word;
+
+      button {
+        padding: 5px;
+        margin: 5px 0;
+        border: none;
+
+        .bi-pencil-fill {
+          color: green;
+        }
+
+        .bi-trash-fill {
+          color: red;
+        }
+
+        i {
+          font-size: 15px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: $laptop) {
+  .admin-dashboard {
+    .admin-side-nav {
+      // overflow: hidden;
+      height: 100vh;
+      width: 100px;
+
+      ul {
+        li {
+          margin: 15px 5px 0;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          margin: 15px 0;
+
+          a,
+          i {
+            margin: 0;
+          }
+        }
+      }
+    }
+  }
+}
