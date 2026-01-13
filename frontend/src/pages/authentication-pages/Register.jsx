@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ComponentWrapper from "../../wrapper/ComponentWrapper";
 import admin_register_page from "../../assets/admin-register-page.png";
 import Alert from "../../utiles/Alert";
@@ -7,6 +7,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const validationSchema = Yup.object({
   name: Yup.string()
@@ -34,30 +35,15 @@ function Register() {
   const [message, setmessage] = useState("");
   const navigate = useNavigate();
 
-  const handleFormSubmit = (values) => {
-    console.log(values);
+  const { handleRegister, setRole } = useContext(AuthContext);
 
-    if (role === "system-admin") {
-      navigate("/admin/products");
-    } else if (role === "store-owner") {
-      navigate("/store-owner");
-    } else if (role === "user") {
-      navigate("/user");
-    }
-    // navigate("/admin/products");
-    // axios
-    //   .post("http://localhost:5000/admin/register", values, {
-    //     withCredentials: true,
-    //   })
-    //   .then((res) => {
-    //     console.log(res);
-    //     setmessage(res.data);
-    //     navigate("/admin/products");
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+  const handleFormSubmit = (values) => {
+    handleRegister(values);
   };
+
+  useEffect(() => {
+    setRole(role);
+  }, []);
 
   return (
     <>

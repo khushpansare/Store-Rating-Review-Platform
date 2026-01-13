@@ -19,6 +19,7 @@ import SO_Stores from "../pages/store-owner-dashboard/Stores";
 import SO_Ratings from "../pages/store-owner-dashboard/Users_Rating";
 import Trending_Store from "../pages/store-owner-dashboard/Trending_Store";
 import DashboardLayout from "../layout/DashboardLayout";
+import User_Main_Page from "../pages/user-pages/User_Main_Page";
 
 function PageRoutes() {
   return useRoutes([
@@ -43,7 +44,7 @@ function PageRoutes() {
       element: <DashboardLayout />,
       children: [
         { index: true, element: <SA_Dashboard /> },
-        { path: "dashboard", element: <SA_Dashboard /> },
+        { path: "", element: <SA_Dashboard /> },
         { path: "owner-details", element: <SA_Owners /> },
         { path: "users", element: <SA_Users /> },
         { path: "stores", element: <SA_Stores /> },
@@ -54,22 +55,16 @@ function PageRoutes() {
       element: <DashboardLayout />,
       children: [
         { index: true, element: <SO_Dashboard /> },
-        { path: "dashboard", element: <SO_Dashboard /> },
+        { path: "", element: <SO_Dashboard /> },
         { path: "stores", element: <SO_Stores /> },
         { path: "users-rating", element: <SO_Ratings /> },
         { path: "trending-store", element: <Trending_Store /> },
       ],
     },
-    // {
-    //   path: "/normal-user",
-    //   element: <CommonDashboard />,
-    //   children: [
-    //     { index: true, element: <Admin_Dashboard /> },
-    //     { path: "dashboard", element: <Admin_Dashboard /> },
-    //     { path: "products", element: <Admin_Products /> },
-    //     { path: "orders", element: <Admin_Orders /> },
-    //   ],
-    // },
+    {
+      path: "/user",
+      element: <User_Main_Page />,
+    },
   ]);
 }
 

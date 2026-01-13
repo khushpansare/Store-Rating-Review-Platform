@@ -1,7 +1,12 @@
 import React from "react";
 
 function Users_Rating() {
-  return <div>Users_Rating</div>;
+  return (
+    <>
+      {" "}
+      <h1> Users_Rating</h1>
+    </>
+  );
 }
 
 export default Users_Rating;

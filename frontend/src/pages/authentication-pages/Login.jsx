@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import ComponentWrapper from "../../wrapper/ComponentWrapper";
 import admin_login_page from "../../assets/admin_login_page.png";
 
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const validationSchema = Yup.object({
   email: Yup.string().email("Invalid email address").required("Required"),
@@ -17,30 +19,15 @@ function Login() {
   const location = useLocation();
   const role = location.state.role;
 
-  const handleFormSubmit = (values) => {
-    console.log(values);
+  const { handleLogin, setRole, userDetails } = useContext(AuthContext);
 
-    if (role === "system-admin") {
-      console.log("system-admin login");
-    } else if (role === "store-owner") {
-      console.log("store-owner login");
-    } else if (role === "user") {
-      console.log("user login");
-    }
-    // navigate("/admin/products");
-    // axios
-    //   .post("http://localhost:5000/admin/register", values, {
-    //     withCredentials: true,
-    //   })
-    //   .then((res) => {
-    //     console.log(res);
-    //     setmessage(res.data);
-    //     navigate("/admin/products");
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+  const handleFormSubmit = (values) => {
+    handleLogin(values);
   };
+
+  useEffect(() => {
+    setRole(role);
+  }, []);
 
   return (
     <ComponentWrapper>
@@ -55,6 +42,11 @@ function Login() {
           <img src={admin_login_page} alt="" />
         </div>
         <div className="form-content">
+          <div style={{ textWrap: "balance" }}>
+            {userDetails.loggedIn === false && (
+              <p className="error-msg">{userDetails.message}</p>
+            )}
+          </div>
           <Formik
             initialValues={{
               fullname: "",

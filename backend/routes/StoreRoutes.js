@@ -6,11 +6,15 @@ const router = express.Router();
 // CUSTOM COMPONENT
 const StoreSchema = require("../models/StoreSchema");
 
-router.get("/", async (req, res) => {
-  const all_stores = await StoreSchema.find().populate("created_by");
+router.get("", async (req, res) => {
+  const decoded_token = jwt.decode(req.cookies.token);
+
+  const all_stores = await StoreSchema.find({
+    created_by: decoded_token.id,
+  }).populate("created_by");
 
   res.send({
-    products: all_stores,
+    store_data: all_stores,
   });
 });
 
@@ -36,6 +40,7 @@ router.post("/add", async (req, res) => {
       store_pincode,
       store_city,
       store_country,
+      average_rating: 0,
       created_by: decoded_token.id,
     });
 
@@ -45,7 +50,7 @@ router.post("/add", async (req, res) => {
     });
     res.send({
       message: "Your Store added succesfully.",
-      products: all_stores,
+      store_data: all_stores,
     });
   } catch (err) {
     res.send(err.message);
@@ -64,7 +69,7 @@ router.patch("/update/:id", async (req, res) => {
     const all_stores = await StoreSchema.find().populate("created_by");
     res.send({
       message: "Your Store updated succesfully.",
-      products: all_stores,
+      store_data: all_stores,
     });
   } catch (err) {
     res.send(err.message);
@@ -80,7 +85,7 @@ router.delete("/delete/:id", async (req, res) => {
     const all_stores = await StoreSchema.find().populate("created_by");
     res.send({
       message: "Your Store deleted succesfully.",
-      products: all_stores,
+      store_data: all_stores,
     });
   } catch (err) {
     res.send(err.message);

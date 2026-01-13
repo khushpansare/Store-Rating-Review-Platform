@@ -6,8 +6,30 @@ const router = express.Router();
 // CUSTOM COMPONENT
 const StoreOwnerSchema = require("../models/StoreOwnerSchema");
 
-router.get("/", (req, res) => {
-  res.send("Store Owner Routes Working");
+router.get("/me", async (req, res) => {
+  try {
+    const token = await req.cookies.token;
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_KEY);
+
+    const user = await StoreOwnerSchema.findById(decoded.id)
+      .select("-password")
+      .lean();
+
+    const user_details = {
+      ...user,
+      isLoggedIn: true,
+    };
+
+    res.status(200).json({
+      user_details: user_details,
+    });
+  } catch (err) {
+    return res.status(401).json({ message: "Invalid token" });
+  }
 });
 
 router.post("/register", async (req, res) => {
@@ -27,23 +49,30 @@ router.post("/register", async (req, res) => {
         if (err) {
           res.send(err.message);
         } else {
-          let user = await StoreOwnerSchema.create({
+          const user = await StoreOwnerSchema.create({
             name,
             email,
             password: hash,
             address,
-            role: true,
+            role: "Store Owner",
           });
 
-          let token = jwt.sign({ email, id: user._id }, process.env.JWT_KEY);
+          let token = jwt.sign(
+            {
+              email,
+              id: user._id,
+            },
+            process.env.JWT_KEY
+          );
           res.cookie("token", token);
           res.send({
-            store_owner: {
+            user_details: {
               _id: user._id,
               name: user.name,
               email: user.email,
               address: user.address,
               role: user.role,
+              loggedin: true,
             },
             message: "Acount created successfully.",
           });
@@ -61,35 +90,55 @@ router.post("/login", async (req, res) => {
 
     const storeOwnerExist = await StoreOwnerSchema.findOne({ email: email });
     if (!storeOwnerExist)
-      return res
-        .status(401)
-        .send(`This ${email} user not registered, please register then login.`);
+      return res.status(401).send({
+        loggedIn: false,
+        message: `This ${email} user not registered, please register then login.`,
+      });
 
     bcrypt.compare(password, storeOwnerExist.password, (comperr, result) => {
       if (result) {
         let token = jwt.sign(
-          { email, id: storeOwnerExist._id },
+          {
+            email,
+            id: storeOwnerExist._id,
+          },
           process.env.JWT_KEY
         );
         res.cookie("token", token);
         res.send({
           message: "You are logged-in",
-          store_owner: {
+          user_details: {
             _id: storeOwnerExist._id,
             name: storeOwnerExist.name,
             email: storeOwnerExist.email,
             address: storeOwnerExist.address,
             role: storeOwnerExist.role,
+            loggedin: true,
           },
         });
       } else {
-        console.log(comperr);
-        return res.send("Email or Password incoorect.");
+        console.log("Email or Password incoorect.");
+        res
+          .status(401)
+          .send({ loggedIn: false, message: "Email or Password incoorect." });
       }
     });
   } catch (err) {
     res.send(err.message);
   }
+});
+
+router.post("/logout", (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    sameSite: "strict", // or "lax"
+    secure: false, // true in production (https)
+  });
+
+  return res.status(200).json({
+    success: true,
+    message: "Logged out successfully",
+  });
 });
 
 module.exports = router;

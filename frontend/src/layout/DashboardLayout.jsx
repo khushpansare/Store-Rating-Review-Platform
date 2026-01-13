@@ -1,14 +1,26 @@
-import React from "react";
+import React, { useContext } from "react";
+import { Outlet } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
 import ComponentWrapper from "../wrapper/ComponentWrapper";
 import CommonDashboard from "../dashboard/CommonDashboard";
-import { Outlet } from "react-router-dom";
+import Error_404 from "../404 page/Error_404";
 
 function DashboardLayout() {
+  const { userDetails } = useContext(AuthContext);
+
   return (
     <ComponentWrapper flag={1}>
       <div className="admin-dashboard">
-        <CommonDashboard />
-        <Outlet />
+        {userDetails.loggedin && userDetails.role ? (
+          <>
+            <CommonDashboard />
+            <div className="w-100 d-flex flex-column">
+              <Outlet />
+            </div>
+          </>
+        ) : (
+          <Error_404 />
+        )}
       </div>
     </ComponentWrapper>
   );

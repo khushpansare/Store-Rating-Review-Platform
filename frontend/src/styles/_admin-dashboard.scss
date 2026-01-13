@@ -6,7 +6,7 @@
   display: flex;
 
   .admin-side-nav {
-    // height: 100vh;
+    height: 100vh;
     width: 300px;
     border-top: 1px solid #fff;
     background: $color-dark-grey;
@@ -41,10 +41,9 @@
           font-size: 15px;
         }
       }
-
-      .active {
-        color: $red;
-      }
+    }
+    .active-link {
+      color: $red;
     }
   }
 

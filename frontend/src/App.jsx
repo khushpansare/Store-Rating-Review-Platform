@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { Route, Routes } from "react-router-dom";
 import PageRoutes from "./routes/pageRoutes";
+import ContextProvider from "./contexts/ContextProvider";
 
 function App() {
   return (
     <>
-      <PageRoutes />
+      <ContextProvider>
+        <PageRoutes />
+      </ContextProvider>
     </>
   );
 }

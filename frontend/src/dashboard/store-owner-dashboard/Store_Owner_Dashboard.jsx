@@ -4,6 +4,7 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 function Store_Owner_Dashboard() {
   const location = useLocation();
   const { pathname } = location;
+
   return (
     <>
       <div className="admin-side-nav">
@@ -11,18 +12,12 @@ function Store_Owner_Dashboard() {
           <li>
             <i
               className={`bi bi-graph-up-arrow ${
-                pathname === "/store-owner/dashboard" ||
-                pathname === "/store-owner"
-                  ? "active"
-                  : ""
+                pathname === "/store-owner" && "active-link"
               }`}
             ></i>
             <NavLink
-              to={"/store-owner/dashboard"}
-              className={`${
-                pathname === "/store-owner/dashboard" ||
-                (pathname === "/store-owner" && "active")
-              }`}
+              to={"/store-owner"}
+              className={`${pathname === "/store-owner" && "active-link"}`}
             >
               Dashboard
             </NavLink>
@@ -30,26 +25,47 @@ function Store_Owner_Dashboard() {
           <li>
             <i
               className={`bi bi-minecart-loaded ${
-                pathname === "/store-owner/stores" && "active"
+                pathname === "/store-owner/stores" && "active-link"
               }`}
             ></i>
-            <NavLink to={"/store-owner/stores"}>Stores</NavLink>
+            <NavLink
+              to={"/store-owner/stores"}
+              className={`${
+                pathname === "/store-owner/stores" && "active-link"
+              }`}
+            >
+              Stores
+            </NavLink>
           </li>
+          {/* <li>
+            <i
+              className={`bi bi-minecart-loaded ${
+                pathname === "/store-owner/users-rating" && "active-link"
+              }`}
+            ></i>
+            <NavLink
+              to={"/store-owner/users-rating"}
+              className={`${
+                pathname === "/store-owner/users-rating" && "active-link"
+              }`}
+            >
+              Users rating
+            </NavLink>
+          </li> */}
           <li>
             <i
               className={`bi bi-minecart-loaded ${
-                pathname === "/store-owner/users-rating" && "active"
+                pathname === "/store-owner/trending-store" && "active-link"
               }`}
             ></i>
-            <NavLink to={"/store-owner/users-rating"}>Users rating</NavLink>
-          </li>
-          <li>
-            <i
-              className={`bi bi-minecart-loaded ${
-                pathname === "/store-owner/trending-store" && "active"
+            <NavLink
+              to={"/store-owner/trending-store"}
+              className={`${
+                pathname === "/store-owner/trending-store" && "active-link"
               }`}
-            ></i>
-            <NavLink to={"/store-owner/trending-store"}>Trending Store</NavLink>
+            >
+              Trending Store
+            </NavLink>
           </li>
         </ul>
       </div>

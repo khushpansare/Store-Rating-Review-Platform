@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Nav_Mobile from "./Nav_Mobile";
+import { AuthContext } from "../contexts/AuthContext";
 
 const welcomePageData = {
   login: {
@@ -30,6 +31,8 @@ function Navbar() {
     mobile_nav_toggle_ref.current.classList.add("mobile-nav-display");
   };
 
+  const { role, handlogout, userDetails } = useContext(AuthContext);
+
   return (
     <>
       <header>
@@ -37,17 +40,7 @@ function Navbar() {
           <ul className="logo">
             <h2>Logo</h2>
           </ul>
-          <ul className="middle-list">
-            <li>
-              <Link to={"/products"}>Products</Link>
-            </li>
-            <li>
-              <Link to={"/admin"}>Admin Dashboard</Link>
-            </li>
-            <li>
-              <Link to={"/user-dashboard"}>User Dashboard</Link>
-            </li>
-          </ul>
+
           <ul>
             <div className="btn-group">
               <a
@@ -64,21 +57,33 @@ function Navbar() {
               >
                 <i className="bi bi-person-circle"></i>
               </a>
-              <ul className="bg-dark dropdown-menu dropdown-menu-end text-center">
-                <li>
-                  <Link to={"/welcome"} state={welcomePageData.login}>
-                    Login
-                  </Link>
-                </li>
-                <li>
-                  <Link to={"/welcome"} state={welcomePageData.register}>
-                    Register
-                  </Link>
-                </li>
-              </ul>
+
+              {userDetails.loggedin ? (
+                <ul className="bg-dark dropdown-menu dropdown-menu-end text-center">
+                  <li>
+                    <button>Profile Setting</button>
+                  </li>
+                  <li>
+                    <button onClick={handlogout}>Logout</button>
+                  </li>
+                </ul>
+              ) : (
+                <ul className="bg-dark dropdown-menu dropdown-menu-end text-center">
+                  <li>
+                    <Link to={"/welcome"} state={welcomePageData.login}>
+                      Login
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to={"/welcome"} state={welcomePageData.register}>
+                      Register
+                    </Link>
+                  </li>
+                </ul>
+              )}
             </div>
           </ul>
-          <ul className="ham-burger-menu">
+          {/* <ul className="ham-burger-menu">
             {mobile_nav_flag ? (
               <a onClick={close_mobile_nav}>
                 <i className="bi bi-x-lg"></i>
@@ -88,7 +93,7 @@ function Navbar() {
                 <i className="bi bi-list"></i>
               </a>
             )}
-          </ul>
+          </ul> */}
         </nav>
       </header>
 

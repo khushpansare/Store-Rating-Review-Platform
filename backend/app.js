@@ -12,7 +12,12 @@ const StoreRoutes = require("./routes/StoreRoutes");
 const UserRoutes = require("./routes/UserRoutes");
 const CommentRoutes = require("./routes/CommentRoutes");
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookie_parser());
@@ -20,10 +25,10 @@ app.use(cookie_parser());
 mongoose
   .connect(process.env.MONGODB_URL)
   .then((res) => {
-    console.log("database connected successfully");
+    // console.log("database connected successfully");
   })
   .catch((err) => {
-    console.log("err", err);
+    // console.log("err", err);
   });
 
 app.use("/store-owner", StoreOwnerRoutes);

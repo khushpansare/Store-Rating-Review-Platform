@@ -6,8 +6,30 @@ const router = express.Router();
 // CUSTOM COMPONENT
 const UserSchema = require("../models/UserSchema");
 
-router.get("/", (req, res) => {
-  res.send("User Routes Working");
+router.get("/me", async (req, res) => {
+  try {
+    const token = await req.cookies.token;
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_KEY);
+
+    const user = await UserSchema.findById(decoded.id)
+      .select("-password")
+      .lean();
+
+    const user_details = {
+      ...user,
+      isLoggedIn: true,
+    };
+
+    res.status(200).json({
+      user_details: user_details,
+    });
+  } catch (err) {
+    return res.status(401).json({ message: "Invalid token" });
+  }
 });
 
 router.post("/register", async (req, res) => {
@@ -32,18 +54,19 @@ router.post("/register", async (req, res) => {
             email,
             password: hash,
             address,
-            role: false,
+            role: "User",
           });
 
           let token = jwt.sign({ email, id: user._id }, process.env.JWT_KEY);
           res.cookie("token", token);
           res.send({
-            store_owner: {
+            user_details: {
               _id: user._id,
               name: user.name,
               email: user.email,
               address: user.address,
               role: user.role,
+              isLoggedIn: true,
             },
             message: "Acount created successfully.",
           });
@@ -71,7 +94,7 @@ router.post("/login", async (req, res) => {
         res.cookie("token", token);
         res.send({
           message: "You are logged-in",
-          store_owner: {
+          user_details: {
             _id: userExist._id,
             name: userExist.name,
             email: userExist.email,
@@ -80,13 +103,25 @@ router.post("/login", async (req, res) => {
           },
         });
       } else {
-        console.log(comperr);
         return res.send("Email or Password incoorect.");
       }
     });
   } catch (err) {
     res.send(err.message);
   }
+});
+
+router.post("/logout", (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    sameSite: "strict", // or "lax"
+    secure: false, // true in production (https)
+  });
+
+  return res.status(200).json({
+    success: true,
+    message: "Logged out successfully",
+  });
 });
 
 module.exports = router;
