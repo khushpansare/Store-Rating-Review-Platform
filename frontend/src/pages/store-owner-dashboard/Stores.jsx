@@ -60,7 +60,7 @@ function Stores() {
           </a>
         </div>
 
-        {storeDetailsData ? (
+        {storeDetailsData.length >= 1 ? (
           <table>
             <thead>
               <tr>

@@ -240,7 +240,7 @@ function Add_New_Store_Form({
                   aria-hidden="true"
                   data-bs-dismiss="modal"
                 >
-                  Submit
+                  {updateHandlerFlag ? "Update Store" : "Add Store"}
                 </button>
               </div>
             </form>

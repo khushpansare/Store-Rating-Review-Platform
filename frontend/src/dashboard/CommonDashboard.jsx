@@ -12,9 +12,13 @@ function CommonDashboard() {
 
   return (
     <>
-      {userDetails.role === "System Admin" && <System_Admin_Dashboard />}
+      {userDetails.user_details?.role === "System Admin" && (
+        <System_Admin_Dashboard />
+      )}
 
-      {userDetails.role === "Store Owner" && <Store_Owner_Dashboard />}
+      {userDetails.user_details?.role === "Store Owner" && (
+        <Store_Owner_Dashboard />
+      )}
     </>
   );
 }

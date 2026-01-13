@@ -11,7 +11,7 @@ function DashboardLayout() {
   return (
     <ComponentWrapper flag={1}>
       <div className="admin-dashboard">
-        {userDetails.loggedin && userDetails.role ? (
+        {userDetails.user_details?.isLoggedIn ? (
           <>
             <CommonDashboard />
             <div className="w-100 d-flex flex-column">

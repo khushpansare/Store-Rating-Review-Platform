@@ -22,10 +22,10 @@ export const AuthProvider = ({ children }) => {
         })
         .then((res) => {
           setUserDetails(res.data);
-          // navigate("/store-owner");
+          navigate("/store-owner");
         })
         .catch((err) => {
-          // console.log(err.response.data);
+          console.log(err.response.data);
           setUserDetails(err.response.data);
         });
     } else if (role === "user") {
@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }) => {
           navigate("/user");
         })
         .catch((err) => {
-          console.log(err);
+          alert(err);
         });
     }
   };
@@ -52,8 +52,8 @@ export const AuthProvider = ({ children }) => {
           withCredentials: true,
         })
         .then((res) => {
-          setUserDetails(res.data.user_details);
           navigate("/store-owner");
+          setUserDetails(res.data.user_details);
         })
         .catch((err) => {
           alert(err);
@@ -74,21 +74,22 @@ export const AuthProvider = ({ children }) => {
   };
 
   const handlogout = () => {
-    if (userDetails.role === "system-admin") {
+    if (userDetails.user_details?.role === "system-admin") {
       navigate("/system-admin");
-    } else if (userDetails.role === "Store Owner") {
+    } else if (userDetails.user_details?.role === "Store Owner") {
       axios
         .post(`${API_base_Url}/store-owner/logout`, {
           withCredentials: true,
         })
         .then((res) => {
           setUserDetails([]);
+          console.log(res);
           navigate("/");
         })
         .catch((err) => {
           alert(err);
         });
-    } else if (userDetails.role === "User") {
+    } else if (userDetails.user_details?.role === "User") {
       axios
         .post(`${API_base_Url}/user/logout`, {
           withCredentials: true,
@@ -103,7 +104,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  useEffect(() => {
+  const getUserDetails = () => {
     if (role === "system-admin" || pathname.includes("/system-admin")) {
       navigate("/system-admin");
     } else if (role === "store-owner" || pathname.includes("/store-owner")) {
@@ -112,7 +113,8 @@ export const AuthProvider = ({ children }) => {
           withCredentials: true,
         })
         .then((res) => {
-          setUserDetails(res.data.user_details);
+          // console.log("authcontext", res.data.user_details.isLoggedIn);
+          setUserDetails(res.data);
         })
         .catch((err) => {
           alert(err);
@@ -129,6 +131,12 @@ export const AuthProvider = ({ children }) => {
         .catch((err) => {
           alert(err);
         });
+    }
+  };
+
+  useEffect(() => {
+    if (userDetails.user_details?.isLoggedIn) {
+      getUserDetails();
     }
   }, []);
 

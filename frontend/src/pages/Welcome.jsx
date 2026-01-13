@@ -15,8 +15,10 @@ function Welcome() {
   const [url_path, seturl_path] = useState("/register");
 
   useEffect(() => {
-    if (pathname === "/") {
+    if (pathname === "/" || location.state?.url === "/register") {
       seturl_path("/register");
+    } else if (location.state?.url === "/login") {
+      seturl_path("/login");
     } else {
       const { path } = location.state;
       seturl_path(path);
@@ -32,16 +34,16 @@ function Welcome() {
           <h1>Login as</h1>
         )}
 
+        <p className="text-center error-msg">
+          <strong>
+            {location.state?.message && location.state?.message + "!"}
+          </strong>
+        </p>
+
         <div className="d-flex justify-content-center flex-wrap">
           <div className="admin">
             <img src={Seller} alt="" />
             <br />
-
-            {/* {path === "/register" ? (
-            <h4>Want to sell your products?</h4>
-          ) : (
-            <h4>Admin Login</h4>
-          )} */}
 
             <Link to={"/login"} state={{ role: "system-admin" }}>
               System Admin

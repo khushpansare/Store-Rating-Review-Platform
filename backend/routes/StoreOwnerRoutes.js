@@ -72,7 +72,7 @@ router.post("/register", async (req, res) => {
               email: user.email,
               address: user.address,
               role: user.role,
-              loggedin: true,
+              isLoggedIn: true,
             },
             message: "Acount created successfully.",
           });
@@ -91,7 +91,7 @@ router.post("/login", async (req, res) => {
     const storeOwnerExist = await StoreOwnerSchema.findOne({ email: email });
     if (!storeOwnerExist)
       return res.status(401).send({
-        loggedIn: false,
+        isLoggedIn: false,
         message: `This ${email} user not registered, please register then login.`,
       });
 
@@ -113,14 +113,14 @@ router.post("/login", async (req, res) => {
             email: storeOwnerExist.email,
             address: storeOwnerExist.address,
             role: storeOwnerExist.role,
-            loggedin: true,
+            isLoggedIn: true,
           },
         });
       } else {
         console.log("Email or Password incoorect.");
         res
           .status(401)
-          .send({ loggedIn: false, message: "Email or Password incoorect." });
+          .send({ isLoggedIn: false, message: "Incoorect Password." });
       }
     });
   } catch (err) {
@@ -135,7 +135,7 @@ router.post("/logout", (req, res) => {
     secure: false, // true in production (https)
   });
 
-  return res.status(200).json({
+  return res.json({
     success: true,
     message: "Logged out successfully",
   });

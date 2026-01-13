@@ -36,3 +36,53 @@ a. Name
 b. Email
 c. Address
 d. Password
+
+<!-- Store Owner created -->
+
+1.  a. Name: Rahul C
+    b. Email: rahul@gmail.com
+    c. Address: Kharadi, sainath nagar, Pune, Maharashtra
+    d. Password: password
+
+i.
+store_name: Eat Club
+store_address: ground floor 001, sainath nagar
+store_landmark: near balaji icecream
+store_pincode: 411014
+store_city: Pune
+store_state: Maharashtra
+store_country: India
+
+ii.
+store_name: Belgium waffle
+store_address: shop no. 02, hadapsar
+store_landmark: near amonora mall
+store_pincode: 4120102
+store_city: Pune
+store_state: Maharashtra
+store_country: India
+
+<!-- Store Created -->
+
+2.  a. Name: Manish P
+    b. Email: manish@gmail.com
+    c. Address: Swargate, Kasba Peth, Pune, Maharashtra
+    d. Password: password
+
+i.
+store_name: Wandy burgers
+store_address: KS building,Keshav nagar
+store_landmark: near VN Society
+store_pincode: 408011
+store_city: Pune
+store_state: Maharashtra
+store_country: India
+
+ii.
+store_name: FNP Cakes
+store_address: shop no. 12, Wakad
+store_landmark: near Heritage building
+store_pincode: 411100
+store_city: Pune
+store_state: Maharashtra
+store_country: India

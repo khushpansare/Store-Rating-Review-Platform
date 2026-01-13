@@ -31,7 +31,7 @@ const initialValues = {
 
 function Register() {
   const location = useLocation();
-  const role = location.state.role;
+  const role = location.state?.role;
   const [message, setmessage] = useState("");
   const navigate = useNavigate();
 
@@ -42,7 +42,17 @@ function Register() {
   };
 
   useEffect(() => {
-    setRole(role);
+    if (!role) {
+      navigate("/welcome", {
+        state: {
+          url: "/register",
+          message:
+            "Before register please choose by which role you want register",
+        },
+      });
+    } else {
+      setRole(role);
+    }
   }, []);
 
   return (

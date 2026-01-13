@@ -17,7 +17,8 @@ const validationSchema = Yup.object({
 
 function Login() {
   const location = useLocation();
-  const role = location.state.role;
+  const role = location.state?.role;
+  const navigate = useNavigate();
 
   const { handleLogin, setRole, userDetails } = useContext(AuthContext);
 
@@ -26,7 +27,16 @@ function Login() {
   };
 
   useEffect(() => {
-    setRole(role);
+    if (!role) {
+      navigate("/welcome", {
+        state: {
+          url: "/login",
+          message: "Before login please choose by which role you want login",
+        },
+      });
+    } else {
+      setRole(role);
+    }
   }, []);
 
   return (
@@ -43,8 +53,10 @@ function Login() {
         </div>
         <div className="form-content">
           <div style={{ textWrap: "balance" }}>
-            {userDetails.loggedIn === false && (
-              <p className="error-msg">{userDetails.message}</p>
+            {userDetails.isLoggedIn === false && (
+              <p className="error-msg">
+                <strong>{userDetails.message}</strong>
+              </p>
             )}
           </div>
           <Formik

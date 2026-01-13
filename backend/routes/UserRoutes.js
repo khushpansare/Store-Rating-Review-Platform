@@ -84,9 +84,10 @@ router.post("/login", async (req, res) => {
 
     const userExist = await UserSchema.findOne({ email: email });
     if (!userExist)
-      return res
-        .status(401)
-        .send(`This ${email} user not registered, please register then login.`);
+      return res.status(401).send({
+        isLoggedIn: false,
+        message: `This ${email} user not registered, please register then login.`,
+      });
 
     bcrypt.compare(password, userExist.password, (comperr, result) => {
       if (result) {
@@ -95,6 +96,7 @@ router.post("/login", async (req, res) => {
         res.send({
           message: "You are logged-in",
           user_details: {
+            isLoggedIn: true,
             _id: userExist._id,
             name: userExist.name,
             email: userExist.email,
@@ -103,7 +105,10 @@ router.post("/login", async (req, res) => {
           },
         });
       } else {
-        return res.send("Email or Password incoorect.");
+        return res.send({
+          isLoggedIn: false,
+          message: "Email or Password incoorect.",
+        });
       }
     });
   } catch (err) {

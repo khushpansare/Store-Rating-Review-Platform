@@ -58,7 +58,7 @@ function Navbar() {
                 <i className="bi bi-person-circle"></i>
               </a>
 
-              {userDetails.loggedin ? (
+              {userDetails.user_details?.isLoggedIn ? (
                 <ul className="bg-dark dropdown-menu dropdown-menu-end text-center">
                   <li>
                     <button>Profile Setting</button>

@@ -8,7 +8,6 @@ export const Store_Details_Provider = ({ children }) => {
   const [storeDetailsData, setstoreDetailsData] = useState([]);
 
   const handleAddStore = (values) => {
-    console.log("handleAddStore", values);
     axios
       .post(`${API_base_Url}/store/add`, values, {
         withCredentials: true,
@@ -18,7 +17,7 @@ export const Store_Details_Provider = ({ children }) => {
         // navigate("/user");
       })
       .catch((err) => {
-        console.log(err);
+        alert(err);
       });
   };
 
@@ -32,7 +31,7 @@ export const Store_Details_Provider = ({ children }) => {
         // navigate("/user");
       })
       .catch((err) => {
-        console.log(err);
+        alert(err);
       });
   };
 
@@ -45,21 +44,21 @@ export const Store_Details_Provider = ({ children }) => {
         setstoreDetailsData(res.data.store_data);
       })
       .catch((err) => {
-        console.log(err);
+        alert(err);
       });
   };
 
   const getStoresData = () => {
     axios
-      .get(`${API_base_Url}/store/`, {
+      .get(`${API_base_Url}/store`, {
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res.data.store_data);
+        // console.log(res.data.store_data);
         setstoreDetailsData(res.data.store_data);
       })
       .catch((err) => {
-        console.log(err);
+        alert(err);
       });
   };
   useEffect(() => {
