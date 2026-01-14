@@ -25,19 +25,20 @@ function User_Main_Page() {
   });
   const { getStoresData, storeDetailsData } = useContext(Store_Details_Context);
   const { handlogout, userDetails } = useContext(AuthContext);
-  const { handlePostReview, reviewData } = useContext(ReviewContext);
+  const { handlePostReview, reviewData, getReviews } =
+    useContext(ReviewContext);
 
   useEffect(() => {
     let loggedInData = JSON.parse(localStorage.getItem("loggedInData"));
 
-    console.log(reviewData[0]?.reviewed_by);
-    if (
-      (loggedInData?.loggedIn && loggedInData?.role === "Store Owner") ||
-      loggedInData?.role === "System Admin"
-    ) {
+    if (loggedInData?.loggedIn) {
+      if (
+        loggedInData?.role === "Store Owner" ||
+        loggedInData?.role === "System Admin"
+      ) {
+        handlogout();
+      }
     }
-    // handlogout();
-    getStoresData();
   }, []);
 
   return (
@@ -48,6 +49,15 @@ function User_Main_Page() {
 
           <div className="d-flex justify-content-center flex-wrap">
             {storeDetailsData.map((val, i) => {
+              let indexArr = "";
+              reviewData.map((r_val, j) => {
+                if (
+                  reviewData[j]?.store_id === val._id &&
+                  reviewData[j]?.reviewed_by === userDetails.user_details?._id
+                ) {
+                  indexArr = reviewData[j];
+                }
+              });
               return (
                 <div className="store-card" key={i}>
                   <h2>{val.store_name}</h2>
@@ -56,60 +66,64 @@ function User_Main_Page() {
                     {val.store_address + ", "} {val.store_city + ", "}
                     {val.store_state + ", "},{val.store_country}
                   </h5>
-                  <h2>
-                    <div
-                      className="d-flex"
-                      style={{ backgroundColor: "transparent" }}
-                    >
+                  <div
+                    className="d-flex justify-content-center align-items-center"
+                    style={{ backgroundColor: "transparent" }}
+                  >
+                    <h2>
                       <strong className="bg-transparent">
                         {val.average_rating + ".0"}
                       </strong>
-                      <Rating
-                        value={val.average_rating}
-                        readOnly
-                        style={{
-                          fontSize: 35,
-                        }}
-                      />
-                    </div>
-                    {/* {console.log(reviewData[i]?.store_id === val._id) && ( */}
-                    <div className="my-3">
-                      <p className="text-dark p-0!">
-                        <strong className="bg-transparent fs-6">
-                          Rate and review
-                        </strong>
-                      </p>
-                      <Rating
-                        key={i}
-                        value={rating.id === i && rating.value}
-                        style={{ backgroundColor: "red" }}
-                        onChange={(e, rate) =>
-                          setRating({ value: rate, id: i })
+                    </h2>
+                    <Rating
+                      value={val.average_rating}
+                      readOnly
+                      style={{
+                        fontSize: 35,
+                      }}
+                    />
+                  </div>
+
+                  <div className="my-3">
+                    <p className="text-dark p-0!">
+                      <strong className="bg-transparent fs-6">
+                        {indexArr
+                          ? `You rate this store ${" " + indexArr?.rating}.0`
+                          : "Rate and review"}
+                      </strong>
+                    </p>
+
+                    <Rating
+                      key={i}
+                      value={
+                        rating.id === i && rating.value
+                          ? rating.value
+                          : val?._id === indexArr?.store_id && indexArr?.rating
+                      }
+                      onChange={(e, rate) => setRating({ value: rate, id: i })}
+                    />
+                  </div>
+
+                  <div>
+                    {userDetails.user_details?.isLoggedIn &&
+                    userDetails.user_details?.role === "User" &&
+                    rating.value &&
+                    rating.id === i ? (
+                      <button
+                        onClick={(e) =>
+                          handlePostReview(val, rating, userDetails)
                         }
-                      />
-                    </div>
-                    {/*  )} */}
-                    <div>
-                      {rating.value &&
-                        rating.id === i &&
-                        (userDetails.user_details?.isLoggedIn &&
-                        userDetails.user_details?.role === "User" ? (
-                          <p>
-                            <button
-                              onClick={(e) =>
-                                handlePostReview(val, rating, userDetails)
-                              }
-                            >
-                              Rate the store
-                            </button>
-                          </p>
-                        ) : (
-                          <p className="error-msg">
-                            <strorng>Please login post your rating</strorng>
-                          </p>
-                        ))}
-                    </div>
-                  </h2>
+                      >
+                        Rate the store
+                      </button>
+                    ) : (
+                      <p className="error-msg">
+                        <strorng className="bg-transparent">
+                          Please login to post your rating
+                        </strorng>
+                      </p>
+                    )}
+                  </div>
                 </div>
               );
             })}

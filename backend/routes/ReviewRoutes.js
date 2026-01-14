@@ -4,6 +4,7 @@ const router = express.Router();
 
 // CUSTOM COMPONENT
 const ReviewSchema = require("../models/ReviewSchema");
+const StoreSchema = require("../models/StoreSchema");
 
 router.get("/", async (req, res) => {
   const all_stores = await ReviewSchema.find();
@@ -11,7 +12,6 @@ router.get("/", async (req, res) => {
   res.send({
     review_details: all_stores,
   });
-  res.send("Comment");
 });
 
 router.post("/add", async (req, res) => {
@@ -28,9 +28,24 @@ router.post("/add", async (req, res) => {
 
     const all_stores = await ReviewSchema.find();
 
+    // To calculate average rating
+    const all_reviews = await ReviewSchema.find({ store_id: store_id });
+    let rating_sum = null;
+    for (let i = 0; i < all_reviews.length; i++) {
+      // console.log(all_reviews[i].rating);
+      rating_sum += all_reviews[i].rating;
+    }
+
+    const average_rating = Math.round(rating_sum / all_reviews.length);
+
+    const updatedStore = await StoreSchema.findByIdAndUpdate(store_id, {
+      $set: { average_rating },
+    });
+
     res.send({
       message: "Your Store added succesfully.",
       review_details: all_stores,
+      updatedStore: updatedStore,
     });
   } catch (err) {
     res.send(err.message);

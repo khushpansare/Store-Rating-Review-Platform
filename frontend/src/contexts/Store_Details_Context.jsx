@@ -54,6 +54,7 @@ export const Store_Details_Provider = ({ children }) => {
       .then((res) => {
         // console.log(res.data);
         setstoreDetailsData(res.data.store_data);
+        // console.log(res.data.store_data);
       })
       .catch((err) => {
         alert(err);

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
+import { Store_Details_Context } from "./Store_Details_Context";
 
 export const ReviewContext = createContext();
 
@@ -9,26 +10,20 @@ export const Review_Context_Provider = ({ children }) => {
 
   const [reviewData, setReviewData] = useState([]);
   const { userDetails } = useContext(AuthContext);
+  const { getStoresData } = useContext(Store_Details_Context);
 
-  const getReviews = () => {
+  const getReviews = async () => {
     // userDetails.user_details?._id;
-    axios
-      .get(
-        `${API_base_Url}/review`,
-        {},
-        {
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        setReviewData(res.data.review_details);
-        console.log(res.data.review_details);
-        // navigate("/store-owner");
-      })
-      .catch((err) => {
-        console.log(err.response);
-        // setUserDetails(err.response.data);
-      });
+    const review_data = await axios.get(
+      `${API_base_Url}/review`,
+      {},
+      {
+        withCredentials: true,
+      }
+    );
+    setReviewData(review_data.data.review_details);
+    getStoresData();
+    // console.log(review_data.data.review_details);
   };
 
   const handlePostReview = (store, rating, userDetails) => {
@@ -43,8 +38,9 @@ export const Review_Context_Provider = ({ children }) => {
         withCredentials: true,
       })
       .then((res) => {
+        getReviews();
         // setUserDetails(res.data);
-        console.log(res.data);
+        // console.log(res.data);
         // navigate("/store-owner");
       })
       .catch((err) => {
@@ -85,7 +81,7 @@ export const Review_Context_Provider = ({ children }) => {
 
   return (
     <ReviewContext.Provider
-      value={{ handlePostReview, handleUpdateReview, reviewData }}
+      value={{ handlePostReview, handleUpdateReview, reviewData, getReviews }}
     >
       {children}
     </ReviewContext.Provider>
