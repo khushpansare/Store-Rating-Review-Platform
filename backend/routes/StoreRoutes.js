@@ -6,9 +6,17 @@ const router = express.Router();
 // CUSTOM COMPONENT
 const StoreSchema = require("../models/StoreSchema");
 
-router.get("", async (req, res) => {
+router.get("/all_stores_data", async (req, res) => {
+  const all_stores = await StoreSchema.find().populate("created_by");
+  res.send({
+    store_data: all_stores,
+  });
+});
+
+router.get("/:id", async (req, res) => {
   const decoded_token = jwt.decode(req.cookies.token);
 
+  console.log(decoded_token);
   const all_stores = await StoreSchema.find({
     created_by: decoded_token.id,
   }).populate("created_by");
@@ -44,7 +52,9 @@ router.post("/add", async (req, res) => {
       created_by: decoded_token.id,
     });
 
-    const all_stores = await StoreSchema.find().populate({
+    const all_stores = await StoreSchema.find({
+      created_by: decoded_token.id,
+    }).populate({
       path: "created_by",
       strictPopulate: false,
     });
@@ -59,6 +69,8 @@ router.post("/add", async (req, res) => {
 
 router.patch("/update/:id", async (req, res) => {
   try {
+    const decoded_token = jwt.decode(req.cookies.token);
+
     const storeId = req.params.id;
     const updateData = req.body;
 
@@ -66,7 +78,9 @@ router.patch("/update/:id", async (req, res) => {
       $set: updateData,
     });
 
-    const all_stores = await StoreSchema.find().populate("created_by");
+    const all_stores = await StoreSchema.find({
+      created_by: decoded_token.id,
+    }).populate("created_by");
     res.send({
       message: "Your Store updated succesfully.",
       store_data: all_stores,
@@ -78,11 +92,15 @@ router.patch("/update/:id", async (req, res) => {
 
 router.delete("/delete/:id", async (req, res) => {
   try {
+    const decoded_token = jwt.decode(req.cookies.token);
+
     const storeId = req.params.id;
 
     const deletedStore = await StoreSchema.findByIdAndDelete(storeId);
 
-    const all_stores = await StoreSchema.find().populate("created_by");
+    const all_stores = await StoreSchema.find({
+      created_by: decoded_token.id,
+    }).populate("created_by");
     res.send({
       message: "Your Store deleted succesfully.",
       store_data: all_stores,

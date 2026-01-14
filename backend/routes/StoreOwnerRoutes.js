@@ -6,8 +6,9 @@ const router = express.Router();
 // CUSTOM COMPONENT
 const StoreOwnerSchema = require("../models/StoreOwnerSchema");
 
-router.get("/me", async (req, res) => {
+router.get("/me/:id", async (req, res) => {
   try {
+    const user_Id = req.params.id;
     const token = await req.cookies.token;
     if (!token) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -15,7 +16,7 @@ router.get("/me", async (req, res) => {
 
     const decoded = jwt.verify(token, process.env.JWT_KEY);
 
-    const user = await StoreOwnerSchema.findById(decoded.id)
+    const user = await StoreOwnerSchema.findById(user_Id)
       .select("-password")
       .lean();
 
@@ -129,14 +130,10 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/logout", (req, res) => {
-  res.clearCookie("token", {
-    httpOnly: true,
-    sameSite: "strict", // or "lax"
-    secure: false, // true in production (https)
-  });
+  res.clearCookie("token");
 
   return res.json({
-    success: true,
+    isLoggedIn: false,
     message: "Logged out successfully",
   });
 });

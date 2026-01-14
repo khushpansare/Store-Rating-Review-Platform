@@ -20,13 +20,15 @@ function Login() {
   const role = location.state?.role;
   const navigate = useNavigate();
 
-  const { handleLogin, setRole, userDetails } = useContext(AuthContext);
+  const { handleLogin, setRole, userDetails, handlogout } =
+    useContext(AuthContext);
 
   const handleFormSubmit = (values) => {
     handleLogin(values);
   };
 
   useEffect(() => {
+    handlogout();
     if (!role) {
       navigate("/welcome", {
         state: {

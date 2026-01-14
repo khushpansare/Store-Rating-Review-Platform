@@ -25,7 +25,7 @@ function PageRoutes() {
   return useRoutes([
     {
       path: "/",
-      element: <Welcome />,
+      element: <User_Main_Page />,
     },
     {
       path: "/welcome",

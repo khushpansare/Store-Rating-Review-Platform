@@ -50,11 +50,9 @@ export const Store_Details_Provider = ({ children }) => {
 
   const getStoresData = () => {
     axios
-      .get(`${API_base_Url}/store`, {
-        withCredentials: true,
-      })
+      .get(`${API_base_Url}/store/all_stores_data`)
       .then((res) => {
-        // console.log(res.data.store_data);
+        // console.log(res.data);
         setstoreDetailsData(res.data.store_data);
       })
       .catch((err) => {

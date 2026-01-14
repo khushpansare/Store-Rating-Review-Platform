@@ -5,6 +5,7 @@ import StarIcon from "@mui/icons-material/Star";
 
 import ComponentWrapper from "../../wrapper/ComponentWrapper";
 import { Store_Details_Context } from "../../contexts/Store_Details_Context";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const StyledRating = styled(Rating)({
   "& .MuiRating-iconFilled": {
@@ -16,10 +17,16 @@ const StyledRating = styled(Rating)({
 });
 
 function User_Main_Page() {
-  const [value, setValue] = useState(2);
+  const [rating, setRating] = useState({
+    value: 0,
+    id: null,
+  });
   const { getStoresData, storeDetailsData } = useContext(Store_Details_Context);
 
+  const { handlogout } = useContext(AuthContext);
+
   useEffect(() => {
+    handlogout();
     getStoresData();
   }, []);
 
@@ -42,9 +49,19 @@ function User_Main_Page() {
                   <h2>
                     <div style={{ backgroundColor: "transparent" }}>
                       <Rating
-                        value={value}
-                        onChange={(e, newValue) => setValue(newValue)}
-                        style={{ background: "transparent" }}
+                        value={val.average_rating}
+                        readOnly
+                        // onChange={(e, newValue) => setValue(newValue)}
+                        // style={{ background: "transparent" }}
+                      />
+                    </div>
+                    <div style={{ backgroundColor: "transparent" }}>
+                      <Rating
+                        key={i}
+                        value={rating.id === i && rating.value}
+                        onChange={(e, rate) =>
+                          setRating({ value: rate, id: i })
+                        }
                       />
                     </div>
                   </h2>

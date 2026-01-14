@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 // CUSTOM COMPONENT
@@ -7,14 +7,17 @@ import ComponentWrapper from "../wrapper/ComponentWrapper";
 // ASSETS
 import Seller from "../assets/seller.png";
 import Buyer from "../assets/customer.png";
+import { AuthContext } from "../contexts/AuthContext";
 
 function Welcome() {
   const location = useLocation();
   const { pathname } = location;
+  const { handlogout } = useContext(AuthContext);
 
   const [url_path, seturl_path] = useState("/register");
 
   useEffect(() => {
+    handlogout();
     if (pathname === "/" || location.state?.url === "/register") {
       seturl_path("/register");
     } else if (location.state?.url === "/login") {

@@ -35,13 +35,14 @@ function Register() {
   const [message, setmessage] = useState("");
   const navigate = useNavigate();
 
-  const { handleRegister, setRole } = useContext(AuthContext);
+  const { handleRegister, setRole, handlogout } = useContext(AuthContext);
 
   const handleFormSubmit = (values) => {
     handleRegister(values);
   };
 
   useEffect(() => {
+    handlogout();
     if (!role) {
       navigate("/welcome", {
         state: {
