@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
-const CommentSchema = mongoose.Schema({
+const ReviewSchema = mongoose.Schema({
   comment: String,
   rating: Number,
-  comment_by: {
+  reviewed_by: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "UserSchema",
   },
@@ -13,4 +13,4 @@ const CommentSchema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("CommentSchema", CommentSchema);
+module.exports = mongoose.model("ReviewSchema", ReviewSchema);

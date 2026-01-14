@@ -6,6 +6,8 @@ import StarIcon from "@mui/icons-material/Star";
 import ComponentWrapper from "../../wrapper/ComponentWrapper";
 import { Store_Details_Context } from "../../contexts/Store_Details_Context";
 import { AuthContext } from "../../contexts/AuthContext";
+import { Link } from "react-router-dom";
+import { ReviewContext } from "../../contexts/ReviewContext";
 
 const StyledRating = styled(Rating)({
   "& .MuiRating-iconFilled": {
@@ -22,11 +24,19 @@ function User_Main_Page() {
     id: null,
   });
   const { getStoresData, storeDetailsData } = useContext(Store_Details_Context);
-
-  const { handlogout } = useContext(AuthContext);
+  const { handlogout, userDetails } = useContext(AuthContext);
+  const { handlePostReview, reviewData } = useContext(ReviewContext);
 
   useEffect(() => {
-    handlogout();
+    let loggedInData = JSON.parse(localStorage.getItem("loggedInData"));
+
+    console.log(reviewData[0]?.reviewed_by);
+    if (
+      (loggedInData?.loggedIn && loggedInData?.role === "Store Owner") ||
+      loggedInData?.role === "System Admin"
+    ) {
+    }
+    // handlogout();
     getStoresData();
   }, []);
 
@@ -47,22 +57,57 @@ function User_Main_Page() {
                     {val.store_state + ", "},{val.store_country}
                   </h5>
                   <h2>
-                    <div style={{ backgroundColor: "transparent" }}>
+                    <div
+                      className="d-flex"
+                      style={{ backgroundColor: "transparent" }}
+                    >
+                      <strong className="bg-transparent">
+                        {val.average_rating + ".0"}
+                      </strong>
                       <Rating
                         value={val.average_rating}
                         readOnly
-                        // onChange={(e, newValue) => setValue(newValue)}
-                        // style={{ background: "transparent" }}
+                        style={{
+                          fontSize: 35,
+                        }}
                       />
                     </div>
-                    <div style={{ backgroundColor: "transparent" }}>
+                    {/* {console.log(reviewData[i]?.store_id === val._id) && ( */}
+                    <div className="my-3">
+                      <p className="text-dark p-0!">
+                        <strong className="bg-transparent fs-6">
+                          Rate and review
+                        </strong>
+                      </p>
                       <Rating
                         key={i}
                         value={rating.id === i && rating.value}
+                        style={{ backgroundColor: "red" }}
                         onChange={(e, rate) =>
                           setRating({ value: rate, id: i })
                         }
                       />
+                    </div>
+                    {/*  )} */}
+                    <div>
+                      {rating.value &&
+                        rating.id === i &&
+                        (userDetails.user_details?.isLoggedIn &&
+                        userDetails.user_details?.role === "User" ? (
+                          <p>
+                            <button
+                              onClick={(e) =>
+                                handlePostReview(val, rating, userDetails)
+                              }
+                            >
+                              Rate the store
+                            </button>
+                          </p>
+                        ) : (
+                          <p className="error-msg">
+                            <strorng>Please login post your rating</strorng>
+                          </p>
+                        ))}
                     </div>
                   </h2>
                 </div>

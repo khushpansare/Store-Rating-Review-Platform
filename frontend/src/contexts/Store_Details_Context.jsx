@@ -59,6 +59,7 @@ export const Store_Details_Provider = ({ children }) => {
         alert(err);
       });
   };
+
   useEffect(() => {
     getStoresData();
   }, []);

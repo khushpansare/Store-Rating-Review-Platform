@@ -3,34 +3,34 @@ const jwt = require("jsonwebtoken");
 const router = express.Router();
 
 // CUSTOM COMPONENT
-const CommentSchema = require("../models/CommentSchema");
+const ReviewSchema = require("../models/ReviewSchema");
 
 router.get("/", async (req, res) => {
-  const all_stores = await CommentSchema.find();
+  const all_stores = await ReviewSchema.find();
 
   res.send({
-    products: all_stores,
+    review_details: all_stores,
   });
   res.send("Comment");
 });
 
 router.post("/add", async (req, res) => {
   try {
-    const { comment, rating, store_id } = req.body;
+    const { rating, store_id, reviewed_by } = req.body;
 
     const decoded_token = jwt.decode(req.cookies.token);
 
-    const store = await CommentSchema.create({
-      comment,
+    const store = await ReviewSchema.create({
       rating,
       store_id,
-      comment_by: decoded_token.id,
+      reviewed_by,
     });
 
-    const all_stores = await CommentSchema.find();
+    const all_stores = await ReviewSchema.find();
+
     res.send({
       message: "Your Store added succesfully.",
-      products: all_stores,
+      review_details: all_stores,
     });
   } catch (err) {
     res.send(err.message);
@@ -42,14 +42,14 @@ router.patch("/update/:id", async (req, res) => {
     const storeId = req.params.id;
     const updateData = req.body;
 
-    const updatedStore = await CommentSchema.findByIdAndUpdate(storeId, {
+    const updatedStore = await ReviewSchema.findByIdAndUpdate(storeId, {
       $set: updateData,
     });
 
-    const all_stores = await CommentSchema.find();
+    const all_stores = await ReviewSchema.find();
     res.send({
       message: "Your Store updated succesfully.",
-      products: all_stores,
+      review_details: all_stores,
     });
   } catch (err) {
     res.send(err.message);
@@ -60,12 +60,12 @@ router.delete("/delete/:id", async (req, res) => {
   try {
     const storeId = req.params.id;
 
-    const deletedStore = await CommentSchema.findByIdAndDelete(storeId);
+    const deletedStore = await ReviewSchema.findByIdAndDelete(storeId);
 
-    const all_stores = await CommentSchema.find();
+    const all_stores = await ReviewSchema.find();
     res.send({
       message: "Your Store deleted succesfully.",
-      products: all_stores,
+      review_details: all_stores,
     });
   } catch (err) {
     res.send(err.message);

@@ -6,18 +6,18 @@ const router = express.Router();
 // CUSTOM COMPONENT
 const UserSchema = require("../models/UserSchema");
 
-router.get("/me", async (req, res) => {
+router.get("/me/:id", async (req, res) => {
   try {
+    const user_Id = req.params.id;
+
     const token = await req.cookies.token;
     if (!token) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_KEY);
+    // const decoded = jwt.verify(token, process.env.JWT_KEY);
 
-    const user = await UserSchema.findById(decoded.id)
-      .select("-password")
-      .lean();
+    const user = await UserSchema.findById(user_Id).select("-password").lean();
 
     const user_details = {
       ...user,
