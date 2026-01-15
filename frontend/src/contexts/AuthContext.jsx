@@ -14,7 +14,28 @@ export const AuthProvider = ({ children }) => {
 
   const handleLogin = (values) => {
     if (role === "system-admin") {
-      console.log("system-admin login");
+      axios
+        .post(`${API_base_Url}/system-admin/login`, values, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          setUserDetails(res.data);
+          // console.log(res.data.user_details);
+          navigate("/system-admin");
+          const { isLoggedIn, _id, role } = res.data.user_details;
+          localStorage.setItem(
+            "loggedInData",
+            JSON.stringify({
+              loggedIn: isLoggedIn,
+              id: _id,
+              role: role,
+            })
+          );
+        })
+        .catch((err) => {
+          // console.log(err.response.data);
+          setUserDetails(err.response.data);
+        });
     } else if (role === "store-owner") {
       axios
         .post(`${API_base_Url}/store-owner/login`, values, {
@@ -117,7 +138,22 @@ export const AuthProvider = ({ children }) => {
       userDetails.user_details?.role === "system-admin" ||
       user_role?.role === "System Admin"
     ) {
-      navigate("/system-admin");
+      axios
+        .post(
+          `${API_base_Url}/system-admin/logout`,
+          {},
+          {
+            withCredentials: true,
+          }
+        )
+        .then((res) => {
+          setUserDetails([]);
+          navigate("/");
+          localStorage.clear();
+        })
+        .catch((err) => {
+          alert(err);
+        });
     } else if (
       userDetails.user_details?.role === "Store Owner" ||
       user_role?.role === "Store Owner"
@@ -131,7 +167,8 @@ export const AuthProvider = ({ children }) => {
           }
         )
         .then((res) => {
-          setUserDetails(res.data);
+          setUserDetails([]);
+
           // console.log(res.data);
           navigate("/");
           localStorage.clear();
@@ -164,7 +201,17 @@ export const AuthProvider = ({ children }) => {
 
   const getUserDetails = (id) => {
     if (role === "system-admin" || pathname.includes("/system-admin")) {
-      navigate("/system-admin");
+      axios
+        .get(`${API_base_Url}/system-admin/me/${id}`, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          // navigate("/system-admin");
+          setUserDetails(res.data);
+        })
+        .catch((err) => {
+          alert(err);
+        });
     } else if (role === "store-owner" || pathname.includes("/store-owner")) {
       axios
         .get(`${API_base_Url}/store-owner/me/${id}`, {
@@ -192,6 +239,36 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const getAllUsersData = (setUsersData) => {
+    if (role === "system-admin" || pathname.includes("/system-admin")) {
+      axios
+        .get(`${API_base_Url}/system-admin/all_users`, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          setUsersData(res.data.user_details);
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    }
+  };
+
+  const getAllStoreOwnersData = (setUsersData) => {
+    if (role === "system-admin" || pathname.includes("/system-admin")) {
+      axios
+        .get(`${API_base_Url}/system-admin/all_store_owners`, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          setUsersData(res.data.user_details);
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    }
+  };
+
   useEffect(() => {
     let loggedInData = JSON.parse(localStorage.getItem("loggedInData"));
 
@@ -202,7 +279,15 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ handleLogin, handleRegister, userDetails, setRole, handlogout }}
+      value={{
+        handleLogin,
+        handleRegister,
+        userDetails,
+        setRole,
+        handlogout,
+        getAllUsersData,
+        getAllStoreOwnersData,
+      }}
     >
       {children}
     </AuthContext.Provider>

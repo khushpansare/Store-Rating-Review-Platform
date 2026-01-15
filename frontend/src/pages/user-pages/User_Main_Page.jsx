@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Rating from "@mui/material/Rating";
 import { styled } from "@mui/material/styles";
-import StarIcon from "@mui/icons-material/Star";
 
 import ComponentWrapper from "../../wrapper/ComponentWrapper";
 import { Store_Details_Context } from "../../contexts/Store_Details_Context";
@@ -25,7 +24,7 @@ function User_Main_Page() {
   });
   const { getStoresData, storeDetailsData } = useContext(Store_Details_Context);
   const { handlogout, userDetails } = useContext(AuthContext);
-  const { handlePostReview, reviewData, getReviews } =
+  const { handlePostReview, reviewData, getReviews, handleUpdateReview } =
     useContext(ReviewContext);
 
   useEffect(() => {
@@ -45,7 +44,7 @@ function User_Main_Page() {
     <>
       <ComponentWrapper>
         <div className="store-container">
-          <h1> User_Main_Page</h1>
+          <h1>Stores</h1>
 
           <div className="d-flex justify-content-center flex-wrap">
             {storeDetailsData.map((val, i) => {
@@ -109,19 +108,31 @@ function User_Main_Page() {
                     userDetails.user_details?.role === "User" &&
                     rating.value &&
                     rating.id === i ? (
-                      <button
-                        onClick={(e) =>
-                          handlePostReview(val, rating, userDetails)
-                        }
-                      >
-                        Rate the store
-                      </button>
-                    ) : (
+                      val?._id === indexArr?.store_id ? (
+                        <button
+                          onClick={(e) =>
+                            handleUpdateReview(e, indexArr, rating)
+                          }
+                        >
+                          Update your Rating
+                        </button>
+                      ) : (
+                        <button
+                          onClick={(e) =>
+                            handlePostReview(val, rating, userDetails)
+                          }
+                        >
+                          Rate the store
+                        </button>
+                      )
+                    ) : rating.value && rating.id === i ? (
                       <p className="error-msg">
                         <strorng className="bg-transparent">
                           Please login to post your rating
                         </strorng>
                       </p>
+                    ) : (
+                      ""
                     )}
                   </div>
                 </div>

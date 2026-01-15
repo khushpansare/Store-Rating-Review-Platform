@@ -1,11 +1,27 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
+
+// MUI COMPONENT
+import Rating from "@mui/material/Rating";
+import { styled } from "@mui/material/styles";
+
+// CUSTOM COMPONENT
 import Model from "../../utiles/Model";
 import { Store_Details_Context } from "../../contexts/Store_Details_Context";
 
+const StyledRating = styled(Rating)({
+  "& .MuiRating-iconFilled": {
+    color: "#ffc107",
+  },
+  "& .MuiRating-iconHover": {
+    color: "#ffb300",
+  },
+});
+
 function Stores() {
-  const { storeDetailsData, handleDeleteStore } = useContext(
-    Store_Details_Context
-  );
+  const { storeDetailsData, handleDeleteStore, stores_data_by_owner } =
+    useContext(Store_Details_Context);
+  const { userDetails } = useContext(AuthContext);
   const [updateHandlerFlag, setupdateHandlerFlag] = useState(false);
   const [storeId, setStoreId] = useState("");
   const [store_form_data, setStore_form_data] = useState({
@@ -46,6 +62,11 @@ function Stores() {
     setStoreId("");
   };
 
+  useEffect(() => {
+    // console.log(userDetails.user_details?._id);
+    stores_data_by_owner(userDetails.user_details?._id);
+  }, []);
+
   return (
     <>
       <div className="table-wrapper">
@@ -80,7 +101,12 @@ function Stores() {
                       {val.store_address + ", "} {val.store_city + ", "}
                       {val.store_state + ", "},{val.store_country}
                     </td>
-                    <td>{val.average_rating}</td>
+                    <td>
+                      <div className="d-flex">
+                        <strong>{val.average_rating + ".0 "}</strong>
+                        <Rating value={val.average_rating} readOnly />
+                      </div>
+                    </td>
                     <td>
                       <button
                         data-bs-toggle="modal"

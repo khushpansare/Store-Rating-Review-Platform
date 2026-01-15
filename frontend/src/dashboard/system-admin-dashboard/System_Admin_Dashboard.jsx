@@ -11,12 +11,12 @@ function System_Admin_Dashboard() {
           <li>
             <i
               className={`bi bi-graph-up-arrow ${
-                pathname === "/system-admin" ? "active" : ""
+                pathname === "/system-admin" ? "active-link" : ""
               }`}
             ></i>
             <NavLink
               to={"/system-admin"}
-              className={`${pathname === "/system-admin" ? "active" : ""}`}
+              className={`${pathname === "/system-admin" ? "active-link" : ""}`}
             >
               Dashboard
             </NavLink>
@@ -24,13 +24,13 @@ function System_Admin_Dashboard() {
           <li>
             <i
               className={`bi bi-minecart-loaded ${
-                pathname === "/system-admin/store-owners" && "active"
+                pathname === "/system-admin/owner-details" && "active-link"
               }`}
             ></i>
             <NavLink
               to={"/system-admin/owner-details"}
               className={`${
-                pathname === "/system-admin/store-owners" && "active"
+                pathname === "/system-admin/owner-details" && "active-link"
               }`}
             >
               Store Owners{" "}
@@ -39,12 +39,14 @@ function System_Admin_Dashboard() {
           <li>
             <i
               className={`bi bi-minecart-loaded ${
-                pathname === "/system-admin/users" && "active"
+                pathname === "/system-admin/users" && "active-link"
               }`}
             ></i>{" "}
             <NavLink
               to={"/system-admin/users"}
-              className={`${pathname === "/system-admin/users" && "active"}`}
+              className={`${
+                pathname === "/system-admin/users" && "active-link"
+              }`}
             >
               Users
             </NavLink>
@@ -52,12 +54,14 @@ function System_Admin_Dashboard() {
           <li>
             <i
               className={`bi bi-minecart-loaded ${
-                pathname === "/system-admin/stores" && "active"
+                pathname === "/system-admin/stores" && "active-link"
               }`}
             ></i>{" "}
             <NavLink
               to={"/system-admin/stores"}
-              className={`${pathname === "/system-admin/stores" && "active"}`}
+              className={`${
+                pathname === "/system-admin/stores" && "active-link"
+              }`}
             >
               Stores{" "}
             </NavLink>

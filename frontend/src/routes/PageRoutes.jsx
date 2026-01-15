@@ -9,7 +9,6 @@ import Login from "../pages/authentication-pages/Login";
 
 // SYSTEM-ADMIN
 import SA_Owners from "../pages/system-admin-dashboard/Store_Owners";
-import SA_Stores from "../pages/system-admin-dashboard/Stores";
 import SA_Users from "../pages/system-admin-dashboard/Users";
 import SA_Dashboard from "../pages/system-admin-dashboard/Dashboard";
 
@@ -47,7 +46,7 @@ function PageRoutes() {
         { path: "", element: <SA_Dashboard /> },
         { path: "owner-details", element: <SA_Owners /> },
         { path: "users", element: <SA_Users /> },
-        { path: "stores", element: <SA_Stores /> },
+        { path: "stores", element: <Trending_Store /> },
       ],
     },
     {

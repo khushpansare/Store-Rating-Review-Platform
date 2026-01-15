@@ -61,8 +61,31 @@ export const Store_Details_Provider = ({ children }) => {
       });
   };
 
+  const stores_data_by_owner = (id) => {
+    axios
+      .get(`${API_base_Url}/store/${id}`)
+      .then((res) => {
+        // console.log(res.data.store_data);
+        setstoreDetailsData(res.data.store_data);
+        // console.log(res.data.store_data);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+
+  const trendingStoresData = () => {
+    axios
+      .get(`${API_base_Url}/store/trending-store`)
+      .then((res) => {})
+      .catch((err) => {
+        alert(err);
+      });
+  };
+
   useEffect(() => {
-    getStoresData();
+    // getStoresData();
+    // trendingStoresData();
   }, []);
 
   return (
@@ -73,6 +96,8 @@ export const Store_Details_Provider = ({ children }) => {
         handleDeleteStore,
         handleUpdateStore,
         getStoresData,
+        trendingStoresData,
+        stores_data_by_owner,
       }}
     >
       {children}

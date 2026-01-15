@@ -20,7 +20,7 @@ router.post("/add", async (req, res) => {
 
     const decoded_token = jwt.decode(req.cookies.token);
 
-    const store = await ReviewSchema.create({
+    const review_create = await ReviewSchema.create({
       rating,
       store_id,
       reviewed_by,
@@ -28,19 +28,23 @@ router.post("/add", async (req, res) => {
 
     const all_stores = await ReviewSchema.find();
 
-    // To calculate average rating
-    const all_reviews = await ReviewSchema.find({ store_id: store_id });
-    let rating_sum = null;
-    for (let i = 0; i < all_reviews.length; i++) {
-      // console.log(all_reviews[i].rating);
-      rating_sum += all_reviews[i].rating;
+    if (review_create) {
+      // To calculate average rating
+      const all_reviews = await ReviewSchema.find({ store_id: store_id });
+      let rating_sum = null;
+
+      for (let i = 0; i < all_reviews.length; i++) {
+        // console.log(all_reviews[i].rating);
+        rating_sum += all_reviews[i].rating;
+      }
+
+      const average_rating = Math.round(rating_sum / all_reviews.length);
+
+      const updatedStore = await StoreSchema.findByIdAndUpdate(store_id, {
+        $set: { average_rating },
+      });
+      //
     }
-
-    const average_rating = Math.round(rating_sum / all_reviews.length);
-
-    const updatedStore = await StoreSchema.findByIdAndUpdate(store_id, {
-      $set: { average_rating },
-    });
 
     res.send({
       message: "Your Store added succesfully.",
@@ -54,17 +58,34 @@ router.post("/add", async (req, res) => {
 
 router.patch("/update/:id", async (req, res) => {
   try {
-    const storeId = req.params.id;
-    const updateData = req.body;
+    const reviewId = req.params.id;
+    const { rating, store_id } = req.body;
 
-    const updatedStore = await ReviewSchema.findByIdAndUpdate(storeId, {
-      $set: updateData,
+    const review_update = await ReviewSchema.findByIdAndUpdate(reviewId, {
+      $set: { rating },
     });
 
-    const all_stores = await ReviewSchema.find();
+    // To calculate average rating
+    if (review_update) {
+      const all_reviews = await ReviewSchema.find({ store_id: store_id });
+
+      let rating_sum = null;
+      for (let i = 0; i < all_reviews.length; i++) {
+        // console.log(all_reviews[i].rating);
+        rating_sum += all_reviews[i].rating;
+      }
+      const average_rating = Math.round(rating_sum / all_reviews.length);
+
+      const updatedStore = await StoreSchema.findByIdAndUpdate(store_id, {
+        $set: { average_rating },
+      });
+    }
+    //
+
+    const all_reviews = await ReviewSchema.find();
     res.send({
       message: "Your Store updated succesfully.",
-      review_details: all_stores,
+      review_details: all_reviews,
     });
   } catch (err) {
     res.send(err.message);

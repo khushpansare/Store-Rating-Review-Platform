@@ -5,19 +5,19 @@ const router = express.Router();
 
 // CUSTOM COMPONENT
 const StoreSchema = require("../models/StoreSchema");
-const ReviewSchema = require("../models/ReviewSchema");
+
+router.get("/trending-store", async (req, res) => {
+  // const all_stores = await StoreSchema.find().populate("created_by");
+
+  const all_stores = await StoreSchema.find().sort({ average_rating: -1 });
+
+  res.send({
+    store_data: all_stores,
+  });
+});
 
 router.get("/all_stores_data", async (req, res) => {
   const all_stores = await StoreSchema.find().populate("created_by");
-
-  // const store_id = "696693004967f8a8ec7fdc4f";
-  // const all_reviews = await ReviewSchema.find({ store_id: store_id });
-  // let avg_rating = null;
-
-  // for (let i = 0; i < all_reviews.length; i++) {
-  //   console.log(all_reviews[i].rating);
-  //   avg_rating += all_reviews[i].rating;
-  // }
 
   res.send({
     store_data: all_stores,
@@ -26,10 +26,10 @@ router.get("/all_stores_data", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   const decoded_token = jwt.decode(req.cookies.token);
+  const user_id = req.params.id;
 
-  console.log(decoded_token);
   const all_stores = await StoreSchema.find({
-    created_by: decoded_token.id,
+    created_by: user_id,
   }).populate("created_by");
 
   res.send({

@@ -13,7 +13,6 @@ export const Review_Context_Provider = ({ children }) => {
   const { getStoresData } = useContext(Store_Details_Context);
 
   const getReviews = async () => {
-    // userDetails.user_details?._id;
     const review_data = await axios.get(
       `${API_base_Url}/review`,
       {},
@@ -23,7 +22,6 @@ export const Review_Context_Provider = ({ children }) => {
     );
     setReviewData(review_data.data.review_details);
     getStoresData();
-    // console.log(review_data.data.review_details);
   };
 
   const handlePostReview = (store, rating, userDetails) => {
@@ -39,40 +37,29 @@ export const Review_Context_Provider = ({ children }) => {
       })
       .then((res) => {
         getReviews();
-        // setUserDetails(res.data);
-        // console.log(res.data);
-        // navigate("/store-owner");
       })
       .catch((err) => {
         console.log(err.response);
-        // setUserDetails(err.response.data);
       });
   };
 
-  const handleUpdateReview = (values) => {
-    console.log("handleUpdateReview");
-    // axios
-    //   .post(`${API_base_Url}/store-owner/login`, values, {
-    //     withCredentials: true,
-    //   })
-    //   .then((res) => {
-    //     setUserDetails(res.data);
-    //     // console.log(res.data.user_details);
-    //     navigate("/store-owner");
-    //     const { isLoggedIn, _id, role } = res.data.user_details;
-    //     localStorage.setItem(
-    //       "loggedInData",
-    //       JSON.stringify({
-    //         loggedIn: isLoggedIn,
-    //         id: _id,
-    //         role: role,
-    //       })
-    //     );
-    //   })
-    //   .catch((err) => {
-    //     // console.log(err.response.data);
-    //     setUserDetails(err.response.data);
-    //   });
+  const handleUpdateReview = (e, review, rating) => {
+    const values = {
+      rating: rating.value,
+      store_id: review.store_id,
+    };
+
+    axios
+      .patch(`${API_base_Url}/review/update/${review._id}`, values, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res.data);
+        getReviews();
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
   };
 
   useEffect(() => {

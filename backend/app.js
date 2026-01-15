@@ -11,6 +11,7 @@ const StoreOwnerRoutes = require("./routes/StoreOwnerRoutes");
 const StoreRoutes = require("./routes/StoreRoutes");
 const UserRoutes = require("./routes/UserRoutes");
 const ReviewRoutes = require("./routes/ReviewRoutes");
+const SystemAdminRoutes = require("./routes/SystemAdminRoutes");
 
 app.use(
   cors({
@@ -35,6 +36,7 @@ app.use("/store-owner", StoreOwnerRoutes);
 app.use("/store", StoreRoutes);
 app.use("/user", UserRoutes);
 app.use("/review", ReviewRoutes);
+app.use("/system-admin", SystemAdminRoutes);
 
 app.get("/", (req, res) => {
   res.send("App is working");

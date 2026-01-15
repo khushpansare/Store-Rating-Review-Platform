@@ -45,15 +45,22 @@ function Login() {
     <ComponentWrapper>
       <div className="auth-container">
         <div className="img">
-          {role === "admin" ? (
-            <h3>Welcome back. Let's grow together.</h3>
-          ) : (
-            <h3> Welcome back. Your shopping journey continues.</h3>
-          )}
-
           <img src={admin_login_page} alt="" />
         </div>
         <div className="form-content">
+          {role === "system-admin" && (
+            <div style={{ textWrap: "balance" }}>
+              <p className="text-dark text-center">
+                <strong>
+                  To login as system admin use <br />
+                  <br />
+                  E-Mail: systemadmin@gmail.com <br />
+                  password: password
+                </strong>
+              </p>
+            </div>
+          )}
+
           <div style={{ textWrap: "balance" }}>
             {userDetails.isLoggedIn === false && (
               <p className="error-msg">

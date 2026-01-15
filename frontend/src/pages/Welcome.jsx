@@ -48,7 +48,11 @@ function Welcome() {
             <img src={Seller} alt="" />
             <br />
 
-            <Link to={"/login"} state={{ role: "system-admin" }}>
+            <Link
+              className="w-50"
+              to={"/login"}
+              state={{ role: "system-admin" }}
+            >
               System Admin
             </Link>
           </div>
@@ -56,13 +60,12 @@ function Welcome() {
           <div className="admin">
             <img src={Seller} alt="" />
             <br />
-            {/* {path === "/register" ? (
-            <h4>Want to sell your products?</h4>
-          ) : (
-            <h4>Admin Login</h4>
-          )} */}
 
-            <Link to={url_path} state={{ role: "store-owner" }}>
+            <Link
+              className="w-50"
+              to={url_path}
+              state={{ role: "store-owner" }}
+            >
               Store Owner
             </Link>
           </div>
@@ -77,7 +80,7 @@ function Welcome() {
             <h4>User Login</h4>
           )}
  */}
-            <Link to={url_path} state={{ role: "user" }}>
+            <Link className="w-50" to={url_path} state={{ role: "user" }}>
               User
             </Link>
           </div>
